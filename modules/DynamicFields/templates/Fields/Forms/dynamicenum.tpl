@@ -1,4 +1,5 @@
-<?php
+{*
+
 /*********************************************************************************
  * SugarCRM Community Edition is a customer relationship management program developed by
  * SugarCRM, Inc. Copyright (C) 2004-2013 SugarCRM Inc.
@@ -37,52 +38,37 @@
  * display the words  "Powered by SugarCRM" and "Supercharged by SuiteCRM".
  ********************************************************************************/
 
-$dictionary['Reminder_Invitee']['table']= 'reminders_invitees';
-$dictionary['Reminder_Invitee']['audited']= false;
-$dictionary['Reminder_Invitee']['fields']= array(
-    'reminder_id' => array(
-        'name' => 'reminder_id',
-        'vname' => 'LBL_REMINDER_ID',
-        'type' => 'id',
-        'required' => true,
-        'massupdate' => false,
-        'studio' => false,
-    ),
-    'related_invitee_module' => array(
-        'name' => 'related_invitee_module',
-        'vname' => 'LBL_RELATED_INVITEE_MODULE',
-        'type' => 'varchar',
-        'len' => 32,
-        'required' => true,
-        'massupdate' => false,
-        'studio' => false,
-    ),
-    'related_invitee_module_id' => array(
-        'name' => 'related_invitee_module_id',
-        'vname' => 'LBL_RELATED_INVITEE_MODULE_ID',
-        'type' => 'id',
-        'required' => true,
-        'massupdate' => false,
-        'studio' => false,
-    ),
-);
-
-$dictionary['Reminder_Invitee']['indices'] = array (
-    array('name' =>'idx_reminder_invitee_name', 'type'=>'index', 'fields'=>array('name')),
-    array('name' =>'idx_reminder_invitee_assigned_user_id', 'type'=>'index', 'fields'=>array('assigned_user_id')),
-    array('name' =>'idx_reminder_invitee_reminder_id', 'type'=>'index', 'fields'=>array('reminder_id')),
-    array('name' =>'idx_reminder_invitee_related_invitee_module', 'type'=>'index', 'fields'=>array('related_invitee_module')),
-    array('name' =>'idx_reminder_invitee_related_invitee_module_id', 'type'=>'index', 'fields'=>array('related_invitee_module_id')),
-);
-
-//$dictionary['Reminder_Invitee']['indices'] = array(
-//    array('name' => 'reminder_invitee_uk', 'type' => 'unique', 'fields' => array('reminder_id', 'related_invitee_module', 'related_invitee_module_id')),
-//);
 
 
-if (!class_exists('VardefManager')){
-    require_once('include/SugarObjects/VardefManager.php');
-}
-VardefManager::createVardef('Reminders_Invitees','Reminder_Invitee', array('basic','assignable'));
 
-?>
+*}
+
+ {include file="modules/DynamicFields/templates/Fields/Forms/coreTop.tpl"}
+
+<tr>
+	<td class='mbLBL'>{sugar_translate module="DynamicFields" label="LBL_DROP_DOWN_LIST"}:</td>
+	<td>
+	{if $hideLevel < 5 && empty($vardef.function)}
+		{html_options name="options" id="options" selected=$selected_dropdown values=$dropdowns output=$dropdowns onChange="ModuleBuilder.dropdownChanged(this.value);"}{if !$uneditable}<br><input type='button' value='{sugar_translate module="DynamicFields" label="LBL_BTN_EDIT"}' class='button' onclick="ModuleBuilder.moduleDropDown(this.form.options.value, this.form.options.value);">&nbsp;<input type='button' value='{sugar_translate module="DynamicFields" label="LBL_BTN_ADD"}' class='button' onclick="ModuleBuilder.moduleDropDown('', this.form.name.value);">{/if}
+	{else}
+		<input type='hidden' name='options' value='{$selected_dropdown}'>{$selected_dropdown}
+	{/if}
+	</td>
+</tr>
+<tr>
+    <td class='mbLBL' >{sugar_translate module="DynamicFields" label="COLUMN_TITLE_PARENT_ENUM"}:</td>
+    <td>
+           <input type="text" id="parentenum"  name="parentenum" value="{$vardef.parentenum}" />
+    </td>
+</tr>
+<tr>
+	<td class='mbLBL' >{sugar_translate module="DynamicFields" label="COLUMN_TITLE_MASS_UPDATE"}:</td>
+	<td>
+	{if $hideLevel < 5}
+		<input type="checkbox" id="massupdate"  name="massupdate" value="1" {if !empty($vardef.massupdate)}checked{/if}/>
+	{else}
+		<input type="checkbox" id="massupdate"  name="massupdate" value="1" disabled {if !empty($vardef.massupdate)}checked{/if}/>
+	{/if}
+	</td>
+</tr>
+{include file="modules/DynamicFields/templates/Fields/Forms/coreBottom.tpl"}
